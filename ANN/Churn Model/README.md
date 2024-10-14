@@ -9,8 +9,9 @@ The main components of this repository include:
 - **`Churn_Modelling.csv`**: Contains the data used for both the churn prediction and salary estimation models.
 - **`Churn_modelling.ipynb`**: Jupyter Notebook implementing the ANN model for churn prediction.
 - **`Churn_Prediction.ipynb`**: Script to make predictions using the trained models.
-- **`app.py`**: A user-friendly Streamlit web application to interact with the models.
 - **`Churn_hyperparametertuning.ipynb`**: Jupyter Notebook for hyperparameter tuning to optimize model performance.
+- **`app.py`**: A user-friendly Streamlit web application to interact with the models.
+- **`Churn_Regressionmodel.ipynb`**: Jupyter Notebook implementing the ANN model for Regression Model (Salary Estimation).
 - **Preprocessing Files**: Includes Pickle files for encoders and scalers used during data preprocessing.
 
 ## How to Use
