@@ -7,10 +7,28 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 import pickle
 import streamlit as st
 
-# Import model, encoder and scalar
+# Import model
+import os
 from tensorflow.keras.models import load_model
-model = load_model('model.h5')
 
+# Debugging Code: Check current working directory
+st.write("Current Working Directory: ", os.getcwd())
+
+# Debugging Code: List files in the current directory
+st.write("Files in the current directory: ", os.listdir())
+
+# Your existing model loading code
+model_path = os.path.join(os.getcwd(), 'model.h5')
+st.write("Model path: ", model_path)
+
+try:
+    model = load_model(model_path)
+    st.write("Model loaded successfully!")
+except FileNotFoundError as e:
+    st.error(f"Error loading model: {e}")
+
+
+# Import encoder and scalar
 with open('geo.pkl','rb') as file:
     geo = pickle.load(file)
 
