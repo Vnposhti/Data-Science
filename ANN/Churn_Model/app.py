@@ -3,28 +3,65 @@
 import pandas as pd
 import numpy as np
 import tensorflow
+from tensorflow.keras.models import load_model
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 import pickle
 import streamlit as st
-
-# Import model
 import os
-model_path = os.path.join(os.getcwd(), 'model.h5')
-from tensorflow.keras.models import load_model
-model = load_model(model_path)
 
-# Import encoder and scalar
-geo_path = os.path.join(os.getcwd(), 'geo.pkl')
-with open(geo_path,'rb') as file:
-    geo = pickle.load(file)
+# Get the current working directory
+cwd = os.getcwd()
 
-gender_path = os.path.join(os.getcwd(), 'gender.pkl')
-with open(gender_path,'rb') as file:
-    gender = pickle.load(file)
+# Model Path
+model_path = os.path.join(cwd, 'model.h5')
+st.write("Model path: ", model_path)
 
-scalar_path = os.path.join(os.getcwd(), 'scalar.pkl')
-with open(scalar_path,'rb') as file:
-    scalar = pickle.load(file)
+# Load the model with error handling
+try:
+    model = load_model(model_path)
+    st.write("Model loaded successfully!")
+except FileNotFoundError as e:
+    st.error(f"Error loading model: {e}")
+except Exception as e:
+    st.error(f"An unexpected error occurred: {e}")
+
+# Encoder and Scalar Paths
+geo_path = os.path.join(cwd, 'geo.pkl')
+gender_path = os.path.join(cwd, 'gender.pkl')
+scalar_path = os.path.join(cwd, 'scalar.pkl')
+
+# Display paths for debugging
+st.write("Geo Encoder path: ", geo_path)
+st.write("Gender Encoder path: ", gender_path)
+st.write("Scalar path: ", scalar_path)
+
+# Load encoders and scaler with error handling
+try:
+    with open(geo_path, 'rb') as file:
+        geo = pickle.load(file)
+    st.write("Geo encoder loaded successfully!")
+except FileNotFoundError as e:
+    st.error(f"Error loading geo encoder: {e}")
+except Exception as e:
+    st.error(f"An unexpected error occurred while loading geo encoder: {e}")
+
+try:
+    with open(gender_path, 'rb') as file:
+        gender = pickle.load(file)
+    st.write("Gender encoder loaded successfully!")
+except FileNotFoundError as e:
+    st.error(f"Error loading gender encoder: {e}")
+except Exception as e:
+    st.error(f"An unexpected error occurred while loading gender encoder: {e}")
+
+try:
+    with open(scalar_path, 'rb') as file:
+        scalar = pickle.load(file)
+    st.write("Scalar loaded successfully!")
+except FileNotFoundError as e:
+    st.error(f"Error loading scalar: {e}")
+except Exception as e:
+    st.error(f"An unexpected error occurred while loading scalar: {e}")
 
 # Streamlit app
 st.title('Churn Prediction')
