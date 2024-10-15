@@ -39,7 +39,8 @@ st.write("Scalar path: ", scalar_path)
 try:
     with open(geo_path, 'rb') as file:
         geo = pickle.load(file)
-    st.write("Geo encoder loaded successfully!")
+        st.write("Geo encoder loaded successfully!")
+        st.write(f"Geo columns: {geo.columns}")  # Display geo structure
 except FileNotFoundError as e:
     st.error(f"Error loading geo encoder: {e}")
 except Exception as e:
@@ -48,7 +49,8 @@ except Exception as e:
 try:
     with open(gender_path, 'rb') as file:
         gender = pickle.load(file)
-    st.write("Gender encoder loaded successfully!")
+        st.write("Gender encoder loaded successfully!")
+        st.write(f"Gender classes: {gender.classes_}")  # Display gender structure
 except FileNotFoundError as e:
     st.error(f"Error loading gender encoder: {e}")
 except Exception as e:
@@ -57,7 +59,7 @@ except Exception as e:
 try:
     with open(scalar_path, 'rb') as file:
         scalar = pickle.load(file)
-    st.write("Scalar loaded successfully!")
+        st.write("Scalar loaded successfully!")
 except FileNotFoundError as e:
     st.error(f"Error loading scalar: {e}")
 except Exception as e:
@@ -67,34 +69,32 @@ except Exception as e:
 st.title('Churn Prediction')
 
 # Customer Input for Streamlit
-creditscore=st.slider('Credit Score',100,900,format="%d")
-geography=st.selectbox('Geography',geo.columns)	
-gender_st=st.selectbox('Gender',gender.classes_)
-age=st.slider('Age',18,100)        
-Tenure=st.slider('Tenure',0,10)
-balance=st.number_input('Balance')
-numofproducts=st.number_input('Number of Products',0,10,format="%d")
-has_cr_card=st.selectbox('Has Credit Card',[0,1])
-is_active_member=st.selectbox('Is active member',[0,1])
-estimatedSalary=st.number_input('Estimated Salary')
+creditscore = st.slider('Credit Score', 100, 900, format="%d")
+geography = st.selectbox('Geography', geo.columns)  # Use geo.columns for geography options
+gender_st = st.selectbox('Gender', gender.classes_)  # Use gender.classes_ for gender options
+age = st.slider('Age', 18, 100)
+Tenure = st.slider('Tenure', 0, 10)
+balance = st.number_input('Balance')
+numofproducts = st.number_input('Number of Products', 0, 10, format="%d")
+has_cr_card = st.selectbox('Has Credit Card', [0, 1])
+is_active_member = st.selectbox('Is active member', [0, 1])
+estimatedSalary = st.number_input('Estimated Salary')
 
 # Prepare Input data
-input_data = pd.DataFrame(
-    {
-        'CreditScore': [creditscore],
-        'Gender': [gender.transform([gender_st])[0]],
-        'Age': [age],
-        'Tenure': [Tenure],
-        'Balance': [balance],
-        'NumOfProducts': [numofproducts],
-        'HasCrCard': [has_cr_card],
-        'IsActiveMember': [is_active_member],
-        'EstimatedSalary': [estimatedSalary]
-    }
-)
+input_data = pd.DataFrame({
+    'CreditScore': [creditscore],
+    'Gender': [gender.transform([gender_st])[0]],  # Transform gender using LabelEncoder
+    'Age': [age],
+    'Tenure': [Tenure],
+    'Balance': [balance],
+    'NumOfProducts': [numofproducts],
+    'HasCrCard': [has_cr_card],
+    'IsActiveMember': [is_active_member],
+    'EstimatedSalary': [estimatedSalary]
+})
 
 # Handle Geography using pd.get_dummies
-geography_df = pd.get_dummies([geography],sparse=False, dtype='int', prefix='Geography')
+geography_df = pd.get_dummies([geography], sparse=False, dtype='int', prefix='Geography')
 geography_df = geography_df.reindex(columns=geo.columns, fill_value=0)  # Align with the geo.pkl structure
 
 # Merge input data with geography dummy variables
@@ -110,7 +110,7 @@ prediction_proba = prediction[0][0]
 # Display the result in Streamlit
 st.write(f"Churn Prediction Probability: {prediction_proba:.2%}")
 
-if prediction_proba>0.5:
+if prediction_proba > 0.5:
     st.write('The customer is likely to churn.')
 else:
     st.write('The customer is not likely to churn.')
