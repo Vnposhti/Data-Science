@@ -7,7 +7,6 @@ from tensorflow.keras.models import load_model
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 import pickle
 import streamlit as st
-import os
 
 # Give Model, Encoder and Scalar Paths to load files
 model_path = '/mount/src/data-science/ANN/Churn_Model/model.h5'
@@ -15,20 +14,15 @@ geo_path = '/mount/src/data-science/ANN/Churn_Model/geo.pkl'
 gender_path = '/mount/src/data-science/ANN/Churn_Model/gender.pkl'
 scalar_path = '/mount/src/data-science/ANN/Churn_Model/scalar.pkl'
 
-# Display paths for debugging
-st.write("Model path: ", model_path)
-st.write("Geo Encoder path: ", geo_path)
-st.write("Gender Encoder path: ", gender_path)
-st.write("Scalar path: ", scalar_path)
-
 # Load model, encoders and scaler with error handling
 model = load_model(model_path)
+
 with open(geo_path, 'rb') as file:
     geo = pickle.load(file)
-    st.write(f"Geo columns: {geo.columns}")  # Display geo structure
+    
 with open(gender_path, 'rb') as file:
     gender = pickle.load(file)
-    st.write(f"Gender classes: {gender.classes_}")  # Display gender structure
+    
 with open(scalar_path, 'rb') as file:
     scalar = pickle.load(file)
     
