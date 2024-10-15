@@ -3,6 +3,11 @@
 ## Overview
 This repository contains an Artificial Neural Network (ANN) model designed to predict customer churn in a banking context. The model identifies whether a bank customer is likely to leave (churn) based on various features. Additionally, the repository includes a regression model to estimate customer salaries using a similar ANN approach.
 
+## Live Demo
+You can access the live Streamlit application at the following link:
+
+**`https://churn-model--023.streamlit.app/`**
+
 ## Main Components
 The main components of this repository include:
 
