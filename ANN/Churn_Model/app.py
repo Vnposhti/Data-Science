@@ -9,62 +9,29 @@ import pickle
 import streamlit as st
 import os
 
-# Get the current working directory
-cwd = os.getcwd()
-
-# Model Path
-model_path = os.path.join(cwd, 'model.h5')
-st.write("Model path: ", model_path)
-
-# Load the model with error handling
-try:
-    model = load_model(model_path)
-    st.write("Model loaded successfully!")
-except FileNotFoundError as e:
-    st.error(f"Error loading model: {e}")
-except Exception as e:
-    st.error(f"An unexpected error occurred: {e}")
-
-# Encoder and Scalar Paths
-geo_path = os.path.join(cwd, 'geo.pkl')
-gender_path = os.path.join(cwd, 'gender.pkl')
-scalar_path = os.path.join(cwd, 'scalar.pkl')
+# Give Model, Encoder and Scalar Paths to load files
+model_path = '/mount/src/data-science/tree/main/ANN/Churn_Model/model.h5'
+geo_path = '/mount/src/data-science/tree/main/ANN/Churn_Model/geo.pkl'
+gender_path = '/mount/src/data-science/tree/main/ANN/Churn_Model/gender.pkl'
+scalar_path = '/mount/src/data-science/tree/main/ANN/Churn_Model/scalar.pkl'
 
 # Display paths for debugging
+st.write("Model path: ", model_path)
 st.write("Geo Encoder path: ", geo_path)
 st.write("Gender Encoder path: ", gender_path)
 st.write("Scalar path: ", scalar_path)
 
-# Load encoders and scaler with error handling
-try:
-    with open(geo_path, 'rb') as file:
-        geo = pickle.load(file)
-        st.write("Geo encoder loaded successfully!")
-        st.write(f"Geo columns: {geo.columns}")  # Display geo structure
-except FileNotFoundError as e:
-    st.error(f"Error loading geo encoder: {e}")
-except Exception as e:
-    st.error(f"An unexpected error occurred while loading geo encoder: {e}")
-
-try:
-    with open(gender_path, 'rb') as file:
-        gender = pickle.load(file)
-        st.write("Gender encoder loaded successfully!")
-        st.write(f"Gender classes: {gender.classes_}")  # Display gender structure
-except FileNotFoundError as e:
-    st.error(f"Error loading gender encoder: {e}")
-except Exception as e:
-    st.error(f"An unexpected error occurred while loading gender encoder: {e}")
-
-try:
-    with open(scalar_path, 'rb') as file:
-        scalar = pickle.load(file)
-        st.write("Scalar loaded successfully!")
-except FileNotFoundError as e:
-    st.error(f"Error loading scalar: {e}")
-except Exception as e:
-    st.error(f"An unexpected error occurred while loading scalar: {e}")
-
+# Load model, encoders and scaler with error handling
+model = load_model(model_path)
+with open(geo_path, 'rb') as file:
+    geo = pickle.load(file)
+    st.write(f"Geo columns: {geo.columns}")  # Display geo structure
+with open(gender_path, 'rb') as file:
+    gender = pickle.load(file)
+    st.write(f"Gender classes: {gender.classes_}")  # Display gender structure
+with open(scalar_path, 'rb') as file:
+    scalar = pickle.load(file)
+    
 # Streamlit app
 st.title('Churn Prediction')
 
